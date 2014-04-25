@@ -22,6 +22,7 @@
  */
 
 #include <ngf/plugin.h>
+#include <ngf/haptic.h>
 #include <hardware_legacy/vibrator.h>
 
 #define AV_KEY "plugin.droid-vibrator.data"
@@ -56,11 +57,8 @@ droid_vibrator_sink_shutdown (NSinkInterface *iface)
 static int
 droid_vibrator_sink_can_handle (NSinkInterface *iface, NRequest *request)
 {
-    (void) iface;
-    (void) request;
-
     N_DEBUG (LOG_CAT "sink can_handle");
-    return TRUE;
+    return n_haptic_can_handle (iface, request);
 }
 
 static int
@@ -106,14 +104,6 @@ droid_vibrator_sink_play (NSinkInterface *iface, NRequest *request)
 
     DroidVibratorData *data = (DroidVibratorData*) n_request_get_data (request, AV_KEY);
     g_assert (data != NULL);
-
-    // (thanks kjokinie) TODO: During call you want to block any vibration
-    // effects (doesn't feel nice against ear)
-
-    // (thanks kjokinie) TODO: respect profile settings to not play when
-    // vibration is off. (there is also a special case for touch screen effects,
-    // which have special bit set in ffmemless effects configuration files, and
-    // follow "profile.current.touchscreen.vibration.level" profile setting)
 
     vibrator_on(duration_ms);
 
