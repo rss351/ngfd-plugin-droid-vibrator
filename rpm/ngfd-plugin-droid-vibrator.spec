@@ -23,7 +23,7 @@ for the non-graphical feedback daemon.
 
 %build
 %cmake
-make %{?jobs:-j%jobs}
+make 
 
 %install
 rm -rf %{buildroot}
